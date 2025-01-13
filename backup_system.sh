@@ -5,7 +5,7 @@ function show_usage {
     exit 1
 }
 
-conf_file="/usr/local/etc/backup_wrapper.conf"
+conf_file="/usr/local/etc/backup/backup_wrapper.conf"
 
 while getopts "c:h" option; do
     case $option in
