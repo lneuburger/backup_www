@@ -1,18 +1,39 @@
 #!/bin/bash
 
+function show_usage {
+    echo "usage: $0 -c CONF_FILE | -h"
+    exit 1
+}
+
+conf_file="/usr/local/etc/backup_wrapper.conf"
+
+while getopts "c:h" option; do
+    case $option in
+    c)
+        conf_file=$OPTARG
+        ;;
+    h)
+        show_usage
+        ;;
+    \?)
+        show_usage
+        ;;
+        
+    esac
+done
+
+if [ ! -f "$conf_file" ]; then
+    echo "$conf_file does not exist or is not readable"
+    exit 1
+fi
+
+source $conf_file
+
 current_date_time=$(date +"%Y%m%d_%H%M%S")
-
-backup_conf=/usr/local/etc/backup/backup.conf
-
-backup_dir=/var/lib/backup
 
 backup_file="${backup_dir}/${current_date_time}.cpio"
 
-backup_script=/usr/local/bin/backup_www.py
-
-python=/usr/bin/python3
-
-max_versions=3
+python=$(which python3)
 
 mkdir -p $backup_dir
 
